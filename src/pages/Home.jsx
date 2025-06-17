@@ -38,7 +38,7 @@ const whatsNew = [
     title: "Wine Pairing Event",
     image: "/assets/images/pexels-pixabay-262978.jpg",
     date: "Every Thursday",
-    description: "Join our sommelier for an evening of wine exploration and perfect pairings."
+    description: "Join our sommelier for an evening of wine exploration and perfect pairings"
   }
 ];
 
