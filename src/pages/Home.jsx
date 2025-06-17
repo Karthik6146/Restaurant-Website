@@ -8,7 +8,7 @@ const featuredItems = [
     name: "Signature Steak",
     price: "$45",
     image: "/assets/images/pexels-elevate-1269025.jpg",
-    description: "Prime cut with our house-made sauce",
+    description: "Prime cut with our house-made sauce.",
     category: "Mains"
   },
   {
