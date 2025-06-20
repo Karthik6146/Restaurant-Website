@@ -32,7 +32,7 @@ function App() {
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <CustomCursor />
         {/* Header with logo and navigation */}
-        <header className="fixed top-0 left-0 w-full bg-white/80 dark:bg-matte-black/80 backdrop-blur-md shadow-lg z-50 transition-colors duration-300">
+        <header className="fixed top-0 left-0 w-full bg-transparent z-50 transition-colors duration-300">
           <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
             <NavLink to="/" className="flex items-center gap-3 group">
               <ChefHatLogo />
@@ -78,7 +78,7 @@ function App() {
           </AnimatePresence>
         </main>
         {/* Footer with logo and social icons */}
-        <footer className="mt-20 py-8 bg-white/80 dark:bg-matte-black/80 border-t border-secondary text-center text-gray-600 dark:text-gray-300 text-sm">
+        <footer className="mt-20 py-8 bg-transparent border-t border-secondary text-center text-gray-600 dark:text-gray-300 text-sm">
           <div className="flex flex-col items-center gap-2">
             <ChefHatLogo />
             <span className="font-serif font-bold text-primary text-lg">Arevei Restaurant</span>

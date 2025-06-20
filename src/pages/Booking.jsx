@@ -6,21 +6,28 @@ const Booking = () => {
   return (
     <div className="min-h-screen relative overflow-hidden py-12 px-4">
       <div
-        className="absolute inset-0 bg-cover bg-center opacity-30"
+        className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: 'url(/assets/images/pexels-kaboompics-6267.jpg)' }}
-      ></div>
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-white/10 to-primary/30 backdrop-blur-sm" />
+      </div>
       <div className="relative z-10 max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-12 relative flex justify-center"
         >
-          <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">
-            Reserve Your Table
-          </h1>
-          <p className="text-lg text-white/90 max-w-2xl mx-auto">
-            Experience the finest dining at Arevei Restaurant. Book your table now and prepare for an unforgettable culinary journey.
-          </p>
+          <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+            <div className="bg-black/60 rounded-2xl w-full h-full" />
+          </div>
+          <div className="relative z-10 py-8 px-4 w-full">
+            <h1 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4 drop-shadow-lg" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+              Reserve Your Table
+            </h1>
+            <p className="text-lg text-white/90 max-w-2xl mx-auto drop-shadow" style={{ textShadow: '0 1px 6px rgba(0,0,0,0.4)' }}>
+              Experience the finest dining at Arevei Restaurant. Book your table now and prepare for an unforgettable culinary journey.
+            </p>
+          </div>
         </motion.div>
 
         <BookingForm />
