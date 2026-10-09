@@ -1,25 +1,28 @@
 import React from "react";
-
-const filters = ["all", "main", "appetizer", "dessert"];
-
-function FilterChips({ activeFilter, setActiveFilter }) {
+const filters = [
+  ["all", "All dishes"],
+  ["appetizer", "Starters"],
+  ["main", "Mains"],
+  ["dessert", "Desserts"],
+];
+export default function FilterChips({ activeFilter, setActiveFilter }) {
   return (
-    <div className="flex justify-center mb-4">
-      {filters.map((filter) => (
+    <div
+      className="filter-chips"
+      role="group"
+      aria-label="Filter dishes by category"
+    >
+      {filters.map(([value, label]) => (
         <button
-          key={filter}
-          onClick={() => setActiveFilter(filter)}
-          className={`px-4 py-2 mx-2 rounded-full ${
-            activeFilter === filter
-              ? "bg-primary text-white"
-              : "bg-gray-200 text-gray-800"
-          }`}
+          className="filter-chip"
+          type="button"
+          key={value}
+          aria-pressed={activeFilter === value}
+          onClick={() => setActiveFilter(value)}
         >
-          {filter.charAt(0).toUpperCase() + filter.slice(1)}
+          {label}
         </button>
       ))}
     </div>
   );
 }
-
-export default FilterChips; 

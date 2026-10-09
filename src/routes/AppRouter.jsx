@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 import Home from "../pages/Home";
 import Menu from "../pages/Menu";
 import Booking from "../pages/Booking";
@@ -20,8 +20,25 @@ function AppRouter() {
       <Route path="/giftcards" element={<GiftCards />} />
       <Route path="/careers" element={<Careers />} />
       <Route path="/group-dining" element={<GroupDining />} />
+      <Route
+        path="*"
+        element={
+          <div className="container">
+            <div className="page-heading">
+              <p className="eyebrow">404 · A little off the menu</p>
+              <h1>This table isn't here.</h1>
+              <p>The page you requested could not be found.</p>
+            </div>
+            <div className="centered-cta">
+              <Link className="button" to="/">
+                Back to home ↗
+              </Link>
+            </div>
+          </div>
+        }
+      />
     </Routes>
   );
 }
 
-export default AppRouter; 
+export default AppRouter;
