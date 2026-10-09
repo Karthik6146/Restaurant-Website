@@ -15,24 +15,24 @@ The upgrade applies these findings:
 
 ## Fixed issues
 
-| Finding | Change |
-| --- | --- |
-| Mobile users could not navigate between pages | Responsive menu with expanded state, Escape dismissal and keyboard focus handling |
-| Transparent header, theme control overlap and inconsistent backgrounds | Shared ivory/forest design, legible sticky header, inline theme control and both themes across pages |
-| Duplicate home footer and many links to nonexistent pages | One shared footer; only supported routes; useful 404 page |
-| Page changes retained old scroll position and generic title | Route-specific titles, scroll reset and main-content focus; visitor section anchor |
-| Booking did nothing beyond logging guest data | Validated Firestore request flow, pending/error/success states and duplicate-submit guard; no PII logs |
-| Newsletter claimed success without storing anything | Consent required; only persisted requests produce success; unavailable state when unconfigured |
-| Gift card buttons were inert; contact/map/awards were unverified | Explicit planned-service states; removed unrelated map, invented awards and placeholder contact links |
-| Firebase initialized with placeholder keys and delayed the menu | Environment configuration, no initialization when absent, immediate usable sample menu |
-| Remote menu content could crash rendering | Schema validation, safe image URLs, fallback data and accessible empty states |
-| Menu was difficult to browse | Responsive dish grid with combined ingredient search and category filters |
-| Image component stayed invisible if loading failed | Native lazy loading, stable image boxes and accessible image-error fallback |
-| Large original photos and 19.6 MB autoplay video hurt loading | No autoplay video; 1200px web image copies, 14,061,347 → 1,796,538 bytes (87.2% smaller); originals preserved |
-| Theme storage exceptions could crash the app | Graceful storage handling; theme still works when storage is blocked |
-| Service worker referenced nonexistent assets and could serve stale files | Unregister the app's worker; retirement worker deletes only its legacy cache |
-| Missing favicon and incorrectly declared image icons | Real SVG favicon/manifest icon and restaurant-specific metadata |
-| Retired tooling and vulnerable dependency lockfile | Vite/Vitest migration; patched Router/Firebase; removed unused CSS, animation and 3D dependencies; patched gRPC 1.x override |
+| Finding                                                                  | Change                                                                                                                       |
+| ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| Mobile users could not navigate between pages                            | Responsive menu with expanded state, Escape dismissal and keyboard focus handling                                            |
+| Transparent header, theme control overlap and inconsistent backgrounds   | Shared ivory/forest design, legible sticky header, inline theme control and both themes across pages                         |
+| Duplicate home footer and many links to nonexistent pages                | One shared footer; only supported routes; useful 404 page                                                                    |
+| Page changes retained old scroll position and generic title              | Route-specific titles, scroll reset and main-content focus; visitor section anchor                                           |
+| Booking did nothing beyond logging guest data                            | Validated Firestore request flow, pending/error/success states and duplicate-submit guard; no PII logs                       |
+| Newsletter claimed success without storing anything                      | Consent required; only persisted requests produce success; unavailable state when unconfigured                               |
+| Gift card buttons were inert; contact/map/awards were unverified         | Explicit planned-service states; removed unrelated map, invented awards and placeholder contact links                        |
+| Firebase initialized with placeholder keys and delayed the menu          | Environment configuration, no initialization when absent, immediate usable sample menu                                       |
+| Remote menu content could crash rendering                                | Schema validation, safe image URLs, fallback data and accessible empty states                                                |
+| Menu was difficult to browse                                             | Responsive dish grid with combined ingredient search and category filters                                                    |
+| Image component stayed invisible if loading failed                       | Native lazy loading, stable image boxes and accessible image-error fallback                                                  |
+| Large original photos and 19.6 MB autoplay video hurt loading            | No autoplay video; 1200px web image copies, 14,061,347 → 1,796,538 bytes (87.2% smaller); originals preserved                |
+| Theme storage exceptions could crash the app                             | Graceful storage handling; theme still works when storage is blocked                                                         |
+| Service worker referenced nonexistent assets and could serve stale files | Unregister the app's worker; retirement worker deletes only its legacy cache                                                 |
+| Missing favicon and incorrectly declared image icons                     | Real SVG favicon/manifest icon and restaurant-specific metadata                                                              |
+| Retired tooling and vulnerable dependency lockfile                       | Vite/Vitest migration; patched Router/Firebase; removed unused CSS, animation and 3D dependencies; patched gRPC 1.x override |
 
 ## Verification
 
@@ -49,9 +49,17 @@ The upgrade applies these findings:
 3. **Abuse protection:** anonymous creates are permitted by the supplied rules, with field allowlists/length/type limits and no client access to saved guest data. Add server-side rate limits and bot/App Check protection before opening publicly. Client validation is a UX check; the server must enforce real dates, capacity and availability.
 4. **Staff operation:** requests require staff review and confirmation. No notifications, table inventory locking, payments, newsletter delivery, unsubscribe endpoint or administration UI is implemented. Define handling/retention and newsletter unsubscribe before sending campaigns.
 5. **Time and network behavior:** current slot logic uses the guest's local timezone and sample hours with 90 minutes before closing. Configure venue timezone and real service rules for launch. Firestore writes may remain pending on an interrupted connection; success is shown only after acknowledgement.
-6. **Hosting:** deploy `dist/`, configure SPA route rewrites, HTTPS/security headers, verified SEO/social details, and production smoke tests. No deployment was authorized or performed.
+6. **Hosting:** Vercel deployment succeeded with the committed `dist/` output configuration and SPA rewrites. Verify production security headers and SEO/social details before launch.
 7. **Coverage limits:** verified with headless Chrome and DOM/unit tests; Safari/Firefox, assistive technology, a full WCAG/axe audit, live backend integration and load testing were not performed. The application no longer has the CRA ESLint build step; Vite compilation and behavioral tests are the current checks.
 
 ## Removed code
 
 Unreferenced custom cursor, old hero/story/testimonial carousels, parallax scene, image-only table map, time picker and unused button were removed after caller searches. The old reservation component/page imports remain small aliases to the real booking implementation. The original video and full-resolution photographs remain available as source assets; they are no longer requested by the homepage.
+
+## Dark mode and motion follow-up
+
+- Replaced the green dark theme with neutral charcoal surfaces, off-white text, and gray controls. Existing theme persistence and the light theme remain supported.
+- Added a manual three-photo slider with native keyboard-accessible buttons, slide announcements, and hidden inactive slides. No automatic rotation. Followed [W3C carousel guidance](https://www.w3.org/WAI/tutorials/carousels/).
+- Restored the existing video as a 1280px silent web copy (4.29 MB versus the 19.55 MB source), with an extracted poster, native controls, a visual description, and no autoplay. `preload="none"` avoids downloading it until requested, following [web.dev video performance guidance](https://web.dev/learn/performance/video-performance). The original remains preserved.
+- Added short page, menu, theme, hover, and sliding transitions. Reduced-motion preferences remove page animations and minimize transitions; content is never dependent on scroll-triggered reveal.
+- Browser checks now exercise slider wrapping, neutral dark colors, video playback/pause, and reduced-motion behavior. Screenshots wait for animations to finish.

@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import NewsletterSignup from "../components/engagement/NewsletterSignup";
 import LazyImage from "../components/common/LazyImage";
+import AtmosphereSlider from "../components/common/AtmosphereSlider";
 import { menuItems } from "../utils/menu";
 
 export default function Home() {
@@ -44,23 +45,7 @@ export default function Home() {
             <span>Made with care. Best enjoyed together.</span>
           </div>
         </div>
-        <div className="hero-visual">
-          <img
-            className="hero-image"
-            src="/assets/images/web/pexels-reneterp-1581384.jpg"
-            alt="Warm restaurant interior with wooden tables and leafy details"
-            fetchPriority="high"
-            width="640"
-            height="560"
-          />
-          <div className="image-caption">
-            <div>
-              <small>WELCOME TO AREVEI</small>
-              <p>Your seat at our table.</p>
-            </div>
-            <span aria-hidden="true">↗</span>
-          </div>
-        </div>
+        <AtmosphereSlider />
       </section>
       <div className="values-strip">
         <div className="container values-inner">
@@ -114,11 +99,30 @@ export default function Home() {
       </section>
       <section className="story-section section">
         <div className="container story-grid">
-          <LazyImage
-            src="/assets/images/web/pexels-reneterp-2544829.jpg"
-            alt="Chef preparing a dish in a restaurant kitchen"
-            className="story-image"
-          />
+          <figure className="restaurant-film">
+            <video
+              controls
+              playsInline
+              muted
+              preload="none"
+              poster="/assets/videos/restaurant-poster.jpg"
+              width="1280"
+              height="720"
+              aria-label="A moment at the table: steaming food, tea, and a carefully arranged place setting"
+            >
+              <source
+                src="/assets/videos/restaurant-film.mp4"
+                type="video/mp4"
+              />
+              <a href="/assets/videos/restaurant-film.mp4">
+                Watch the restaurant film
+              </a>
+            </video>
+            <figcaption>
+              A moment at the table — a steaming dish and tea, ready to share.
+              Silent film.
+            </figcaption>
+          </figure>
           <div className="story-copy">
             <p className="eyebrow">Food with a little soul</p>
             <h2>

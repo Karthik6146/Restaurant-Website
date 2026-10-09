@@ -89,7 +89,12 @@ function Layout() {
           </div>
         </div>
       </header>
-      <main id="main-content" ref={mainRef} tabIndex={-1}>
+      <main
+        key={location.pathname}
+        id="main-content"
+        ref={mainRef}
+        tabIndex={-1}
+      >
         <AppRouter />
       </main>
       <footer className="site-footer">

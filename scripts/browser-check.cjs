@@ -28,6 +28,7 @@ const mime = {
   ".json": "application/json",
   ".jpg": "image/jpeg",
   ".png": "image/png",
+  ".mp4": "video/mp4",
 };
 const server = http.createServer((req, res) => {
   const pathname = decodeURIComponent(
@@ -104,6 +105,9 @@ async function navigate(url) {
   );
 }
 async function screenshot(name) {
+  await evaluate(
+    "Promise.all(document.getAnimations().map(animation => animation.finished.catch(() => {})))",
+  );
   const result = await command("Page.captureScreenshot", {
     format: "png",
     captureBeyondViewport: false,
@@ -242,6 +246,31 @@ async function screenshot(name) {
             "document.querySelector('button[type=submit]').disabled",
           ),
         );
+      if (route === "/") {
+        await evaluate(
+          "document.querySelector('[aria-label=\"Previous photo\"]').click()",
+        );
+        await waitFor(
+          "document.querySelectorAll('.slider-dots button')[2].getAttribute('aria-pressed') === 'true'",
+        );
+        await evaluate(
+          "document.querySelector('[aria-label=\"Next photo\"]').click()",
+        );
+        await waitFor(
+          "document.querySelectorAll('.slider-dots button')[0].getAttribute('aria-pressed') === 'true'",
+        );
+        assert.equal(
+          await evaluate(
+            "document.querySelectorAll('.slider-slide[aria-hidden=false]').length",
+          ),
+          1,
+        );
+        assert.ok(
+          await evaluate(
+            "document.querySelector('video').paused && !document.querySelector('video').autoplay && document.querySelector('video').preload === 'none'",
+          ),
+        );
+      }
       if (route === "/missing")
         assert.ok(await evaluate("document.title.includes('Page not found')"));
     }
@@ -277,10 +306,8 @@ async function screenshot(name) {
     }
     await evaluate("document.querySelector('.theme-toggle').click()");
     await waitFor("document.documentElement.classList.contains('dark')");
-    assert.ok(
-      await evaluate(
-        "getComputedStyle(document.body).backgroundColor === 'rgb(24, 35, 28)'",
-      ),
+    await waitFor(
+      "getComputedStyle(document.body).backgroundColor === 'rgb(18, 18, 18)'",
     );
     await command("Page.reload");
     await waitFor(
@@ -312,6 +339,26 @@ async function screenshot(name) {
     await evaluate("getComputedStyle(document.documentElement).scrollBehavior"),
     "auto",
   );
+  await navigate(base);
+  assert.equal(
+    await evaluate(
+      "getComputedStyle(document.querySelector('#main-content')).animationName",
+    ),
+    "none",
+  );
+  assert.ok(
+    await evaluate(
+      "parseFloat(getComputedStyle(document.querySelector('.slider-track')).transitionDuration) < 0.001",
+    ),
+  );
+  await evaluate("document.querySelector('video').play()");
+  await waitFor("document.querySelector('video').currentTime > 0");
+  await evaluate("document.querySelector('video').pause()");
+  assert.ok(
+    await evaluate(
+      "document.querySelector('video').paused && !document.querySelector('video').error",
+    ),
+  );
   await navigate(base + "/reservation");
   assert.deepEqual(
     await evaluate(
@@ -322,7 +369,7 @@ async function screenshot(name) {
   );
   assert.deepEqual(errors, [], "Browser errors");
   console.log(
-    "PASS: 9 routes at 320, 768, 1024, and 1440px in light/dark; search/filter, mobile navigation/Escape, route focus, theme persistence, labels, reduced motion, unavailable forms, no broken loaded images or browser errors.",
+    "PASS: 9 routes at 320, 768, 1024, and 1440px in light/dark; slider wrapping, video playback/pause, search/filter, mobile navigation/Escape, route focus, theme persistence, labels, reduced motion, unavailable forms, no broken loaded images or browser errors.",
   );
   console.log(
     "Screenshots: artifacts/desktop.png, artifacts/mobile.png, artifacts/desktop-dark.png",
