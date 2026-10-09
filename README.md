@@ -44,6 +44,8 @@ Optimized JPGs are in `public/assets/images/web/`; original photos are preserved
 
 Deploy `dist/` at a site's root, with unknown page routes rewritten to `index.html`. Host with HTTPS and appropriate security headers. This project has not been deployed. Verify the restaurant's address, hours, currency, dishes, allergens, photography rights and contact details before launch.
 
+For Vercel, the root `vercel.json` selects Vite, runs `npm run build`, publishes `dist/`, and enables SPA deep links. It overrides the old `build/` output setting. Deploy a new commit containing this configuration; retrying an older commit will not include the fix. See [Vercel's Vite deployment guide](https://vercel.com/docs/frameworks/frontend/vite).
+
 ## Migration from the previous setup
 
 - `npm start`, `npm test`, and `npm run build` still work; development now uses port **5173**, and deploy output changed from **build/** to **dist/**.
