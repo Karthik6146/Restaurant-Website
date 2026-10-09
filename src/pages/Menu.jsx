@@ -8,9 +8,11 @@ export default function Menu() {
   const [search, setSearch] = useState("");
   return (
     <div className="container">
-      <div className="page-heading">
-        <p className="eyebrow">Seasonal. Thoughtful. Delicious.</p>
-        <h1>Something for every appetite.</h1>
+      <div className="page-heading menu-heading">
+        <p className="eyebrow">The Arevei menu</p>
+        <h1>
+          Seasonal by <em>nature.</em>
+        </h1>
         <p>
           A menu inspired by the season and the pleasure of sharing a meal. Find
           your next favorite below.

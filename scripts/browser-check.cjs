@@ -29,6 +29,7 @@ const mime = {
   ".jpg": "image/jpeg",
   ".png": "image/png",
   ".mp4": "video/mp4",
+  ".woff2": "font/woff2",
 };
 const server = http.createServer((req, res) => {
   const pathname = decodeURIComponent(
@@ -105,6 +106,7 @@ async function navigate(url) {
   );
 }
 async function screenshot(name) {
+  await evaluate("document.fonts.ready");
   await evaluate(
     "Promise.all(document.getAnimations().map(animation => animation.finished.catch(() => {})))",
   );
@@ -224,6 +226,7 @@ async function screenshot(name) {
       );
       assert.deepEqual(images, [], route + ": broken images");
       if (route === "/menu") {
+        if (width === 1440) await screenshot("menu.png");
         assert.equal(
           await evaluate("document.querySelectorAll('.dish-card').length"),
           6,
@@ -315,6 +318,8 @@ async function screenshot(name) {
     );
     for (const route of routes) {
       await navigate(base + route);
+      if (route === "/menu" && width === 1440)
+        await screenshot("menu-dark.png");
       assert.ok(
         await evaluate("document.documentElement.classList.contains('dark')"),
       );
@@ -332,6 +337,30 @@ async function screenshot(name) {
     await evaluate("document.querySelector('.theme-toggle').click()");
     await waitFor("!document.documentElement.classList.contains('dark')");
   }
+  await navigate(base);
+  await evaluate(
+    "document.querySelector('video').scrollIntoView({ behavior: 'instant', block: 'center' })",
+  );
+  await waitFor(
+    "!document.querySelector('video').paused && document.querySelector('video').currentTime > 0",
+  );
+  assert.ok(
+    await evaluate(
+      "document.querySelector('video').muted && document.querySelector('video').loop && document.querySelector('video').controls",
+    ),
+  );
+  await evaluate(
+    "document.querySelector('video').pause(); window.scrollTo({ top: 0, behavior: 'instant' })",
+  );
+  await delay(100);
+  await evaluate(
+    "document.querySelector('video').scrollIntoView({ behavior: 'instant', block: 'center' })",
+  );
+  await delay(250);
+  assert.ok(
+    await evaluate("document.querySelector('video').paused"),
+    "Scrolling must not override a visitor's pause.",
+  );
   await command("Emulation.setEmulatedMedia", {
     features: [{ name: "prefers-reduced-motion", value: "reduce" }],
   });
@@ -340,6 +369,14 @@ async function screenshot(name) {
     "auto",
   );
   await navigate(base);
+  await evaluate(
+    "document.querySelector('video').scrollIntoView({ behavior: 'instant', block: 'center' })",
+  );
+  await delay(250);
+  assert.ok(
+    await evaluate("document.querySelector('video').paused"),
+    "Reduced motion prevents autoplay.",
+  );
   assert.equal(
     await evaluate(
       "getComputedStyle(document.querySelector('#main-content')).animationName",
@@ -353,6 +390,15 @@ async function screenshot(name) {
   );
   await evaluate("document.querySelector('video').play()");
   await waitFor("document.querySelector('video').currentTime > 0");
+  await command("Emulation.setEmulatedMedia", {
+    features: [{ name: "prefers-reduced-motion", value: "no-preference" }],
+  });
+  await waitFor("!matchMedia('(prefers-reduced-motion: reduce)').matches");
+  await delay(100);
+  await command("Emulation.setEmulatedMedia", {
+    features: [{ name: "prefers-reduced-motion", value: "reduce" }],
+  });
+  await waitFor("document.querySelector('video').paused");
   await evaluate("document.querySelector('video').pause()");
   assert.ok(
     await evaluate(
@@ -369,7 +415,7 @@ async function screenshot(name) {
   );
   assert.deepEqual(errors, [], "Browser errors");
   console.log(
-    "PASS: 9 routes at 320, 768, 1024, and 1440px in light/dark; slider wrapping, video playback/pause, search/filter, mobile navigation/Escape, route focus, theme persistence, labels, reduced motion, unavailable forms, no broken loaded images or browser errors.",
+    "PASS: 9 routes at 320, 768, 1024, and 1440px in light/dark; slider wrapping, viewport autoplay, persistent pause, live reduced-motion changes, search/filter, mobile navigation/Escape, route focus, theme persistence, labels, unavailable forms, no broken loaded images or browser errors.",
   );
   console.log(
     "Screenshots: artifacts/desktop.png, artifacts/mobile.png, artifacts/desktop-dark.png",

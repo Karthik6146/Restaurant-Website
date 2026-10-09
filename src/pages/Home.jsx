@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import NewsletterSignup from "../components/engagement/NewsletterSignup";
 import LazyImage from "../components/common/LazyImage";
 import AtmosphereSlider from "../components/common/AtmosphereSlider";
+import RestaurantFilm from "../components/common/RestaurantFilm";
 import { menuItems } from "../utils/menu";
 
 export default function Home() {
@@ -99,30 +100,7 @@ export default function Home() {
       </section>
       <section className="story-section section">
         <div className="container story-grid">
-          <figure className="restaurant-film">
-            <video
-              controls
-              playsInline
-              muted
-              preload="none"
-              poster="/assets/videos/restaurant-poster.jpg"
-              width="1280"
-              height="720"
-              aria-label="A moment at the table: steaming food, tea, and a carefully arranged place setting"
-            >
-              <source
-                src="/assets/videos/restaurant-film.mp4"
-                type="video/mp4"
-              />
-              <a href="/assets/videos/restaurant-film.mp4">
-                Watch the restaurant film
-              </a>
-            </video>
-            <figcaption>
-              A moment at the table — a steaming dish and tea, ready to share.
-              Silent film.
-            </figcaption>
-          </figure>
+          <RestaurantFilm />
           <div className="story-copy">
             <p className="eyebrow">Food with a little soul</p>
             <h2>

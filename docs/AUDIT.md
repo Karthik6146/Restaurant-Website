@@ -63,3 +63,10 @@ Unreferenced custom cursor, old hero/story/testimonial carousels, parallax scene
 - Restored the existing video as a 1280px silent web copy (4.29 MB versus the 19.55 MB source), with an extracted poster, native controls, a visual description, and no autoplay. `preload="none"` avoids downloading it until requested, following [web.dev video performance guidance](https://web.dev/learn/performance/video-performance). The original remains preserved.
 - Added short page, menu, theme, hover, and sliding transitions. Reduced-motion preferences remove page animations and minimize transitions; content is never dependent on scroll-triggered reveal.
 - Browser checks now exercise slider wrapping, neutral dark colors, video playback/pause, and reduced-motion behavior. Screenshots wait for animations to finish.
+
+## Premium theme and autoplay follow-up
+
+- Reviewed [The Modern](https://www.themodernnyc.com/) and [Core by Clare Smyth](https://corebyclaresmyth.com/) as restaurant references. Our design interpretation uses editorial headings, an uncluttered menu hierarchy, framed food photography, fine borders, and restrained warm accents. Neutral charcoal dark surfaces remain unchanged.
+- Self-hosted Latin WOFF2 versions of Cormorant Garamond (regular/italic 500) and DM Sans (400–600). The three font files total about 84 KB; their SIL Open Font Licenses are included in `public/assets/fonts`. No runtime font-service requests.
+- Video now starts muted and loops when at least 40% enters view, following [MDN autoplay guidance](https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Autoplay). Playback is attempted once, so scrolling does not undo a guest's manual pause. Native controls remain available if the browser blocks autoplay.
+- Reduced motion prevents automatic playback; enabling it during playback pauses the video. Manual playback remains available. Browser checks cover these behaviors and capture the menu in both themes.
